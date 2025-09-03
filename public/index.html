@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html{
+            background-color: #f0f0f0;
+        }
+        h1{
+            text-align: center;
+        }
+        nav{
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #333;
+            color: white;
+            padding: 1%;
+        }
+        button{
+            background: linear-gradient( blue, white);
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-weight: bolder;
+            box-shadow: 0 0 10px black;
+        }
+        button:hover, button:active{
+            background: linear-gradient( white, blue);
+            transition: 0.2s;
+            box-shadow: 0 0 5px white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello <span id="firstName">Loading...</span></h1>
+    <nav>
+       <a href="/src/components/AdminPanel.html"><button>Admin Panel</button></a>
+       <a href="/src/components/JobCardManager.html"><button>Job Card Manager</button></a>
+       <a href="/src/components/ReportsList.html"><button>Reports List</button></a>
+
+       <a href="/public/index.html"><button>HOME</button></a>
+
+       <a href="/src/pages/Analytics.html"><button>Analytics</button></a>
+       <a href="/src/pages/Dashboard.html"><button>Dashboard</button></a>
+       <a href="/src/pages/Reports.html"><button>Reports</button></a>
+    </nav>
+</body>
+</html>

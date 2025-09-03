@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html{
+            background-color: #f0f0f0;
+        }
+        h1{
+            text-align: center;
+        }
+        nav{
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #333;
+            color: white;
+            padding: 1%;
+        }
+        button{
+            background: linear-gradient( blue, white);
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-weight: bolder;
+            box-shadow: 0 0 10px black;
+        }
+        button:hover, button:active{
+            background: linear-gradient( white, blue);
+            transition: 0.2s;
+            box-shadow: 0 0 5px white;
+        }
+        header{
+            background-color: #c2c0c0;
+            height: 6vh;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 1%;
+            align-items: center;
+        }
+        header img{
+            height: 4vh;
+        }
+        header div{
+            display: flex;
+        }
+        header p{
+            margin-left: -30%;
+            margin-top: -5%;
+            background-color: yellow;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            text-align: center;
+            font-weight: bolder;
+        }
+        header p:hover{
+            background-color: orange;
+            font-size: 2rem;
+            width: 40px;
+            height: 40px;
+        }
+        header>div>img{
+            border: 1px solid blue;
+            border-radius: 50px;
+        }
+        main{
+            margin-top: 6vh;
+            max-height: 80vh;
+            overflow: auto;
+        }
+        main>div{
+            padding: 1%;
+            width: 90%;
+            margin: 1% auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #c2c0c0;
+        }
+        table{
+            width: 90%;
+            margin: 1% auto;
+            border-collapse: collapse;
+            border: 2px solid #c2c0c0;
+            max-height: 50vh;
+            overflow: auto;
+        }
+        th, td{
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #c2c0c0;
+        }
+        th{
+            background-color: #dbdada;
+        }
+        tr:nth-child(even){
+            background-color: #ebe6e6;
+        }
+        tr:nth-child(even):hover{
+            background-color: #d4d0d0;
+        }
+
+        input{
+            padding: 12px 15px;
+            border: 1px solid #c2c0c0;
+            border-radius: 10px;
+            width: 70%;
+            border: none;
+            background-color: transparent;
+            outline: none;
+            box-shadow: 0 0 5px blue;
+            text-align: center;
+        }
+        select, option{
+            padding: 10px 13px;
+            border-radius: 10px;
+            border: none;
+            background-color: transparent;
+            outline: none;
+            box-shadow: 0 0 5px blue;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="/images/menu.png" alt="">
+            <h1>Hello <span id="firstName">Loading...</span></h1>
+        <div>
+            <div>
+                <img src="/images/notification.png" alt="">
+                <p>7</p>
+            </div>
+            <img src="/images/user.png" alt="">
+        </div>
+        
+    </header>
+    <main>
+        <div>
+            <h2>Total Reports: <span id="totalReports">76</span></h2>
+            <h2>Pending Reports: <span id="pendingReports">12</span></h2>
+            <h2>Critical Reports: <span id="criticalReports">5</span></h2>
+            <h2>Clean-up Schedules: <span id="cleanupSchedules">3</span></h2>
+        </div>
+        <div>
+            <h2>Filter your reports by:</h2>
+            <label for="status">Status:</label>
+            <select id="status">
+                <option value="">None</option>
+                <option value="Fixed">Fixed</option>
+                <option value="Pending">Pending</option>
+                <option value="False Alert">False Alert</option>
+                <option value="Critical">Critical</option>
+            </select>
+            <label for="month">Month:</label>
+            <select id="month">
+                <option value="">None</option>
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+            </select>
+            <label for="year">Year:</label>
+            <select id="year">
+                <option value="">None</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+            </select>
+            <button id="filterButton">Filter</button>
+        </div>
+        <div>
+            <h2>Sort Reports:</h2>
+            <label for="sortBy">Sort By:</label>
+            <select id="sortBy">
+                <option value="Oldest">Oldest</option>
+                <option value="Newest">Newest</option>
+            </select>
+            <button id="sortButton">Sort</button>
+        </div>
+        <div>
+            <h2>Search Reports:</h2>
+            <input type="text" id="searchInput" placeholder="Search by Report ID">
+            <button id="searchButton">Search</button>
+        </div>
+        <table>
+            <tr>
+                <th>NO</th>
+                <th>Report ID</th>
+                <th>Status</th>
+                <th>Date Created</th>
+                <th>Date Fixed</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>RPT-001</td>
+                <td>Fixed</td>
+                <td>2023-01-01</td>
+                <td>2023-01-02</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>RPT-002</td>
+                <td>Pending</td>
+                <td>2025-01-03</td>
+                <td>...</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>RPT-003</td>
+                <td>Critical</td>
+                <td>2025-01-04</td>
+                <td>2025-01-10</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>RPT-004</td>
+                <td>False Alert</td>
+                <td>2025-01-05</td>
+                <td>...</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>RPT-005</td>
+                <td>Fixed</td>
+                <td>2025-01-06</td>
+                <td>...</td>
+            </tr>
+        </table>
+    </main>
+    <nav>
+       <a href="/src/components/AdminPanel.html"><button>Admin Panel</button></a>
+       <a href="/src/components/JobCardManager.html"><button>Job Card Manager</button></a>
+       <a href="/src/components/ReportsList.html"><button>Reports List</button></a>
+
+       <a href="/public/index.html"><button>HOME</button></a>
+
+       <a href="/src/pages/Analytics.html"><button>Analytics</button></a>
+       <a href="/src/pages/Dashboard.html"><button>Dashboard</button></a>
+       <a href="/src/pages/Reports.html"><button>Reports</button></a>
+    </nav>
+</body>
+</html>

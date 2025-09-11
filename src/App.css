@@ -1,0 +1,72 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f0f2f5;
+  color: #333;
+}
+
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  /* Add padding to the bottom to prevent content from being hidden behind the fixed nav bar */
+  padding-bottom: 70px; 
+}
+
+h1 {
+  color: #1a1a1a;
+  margin-bottom: 20px;
+}
+
+/* Main Navigation Styling */
+.main-nav {
+  /* Position the nav bar at the bottom of the viewport */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  background-color: #333;
+  padding: 10px 0;
+  border-radius: 0; /* Remove rounded corners for full-width bar */
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for separation */
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+  background-color: #007bff;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Styling for the content areas */
+h2 {
+  color: #007bff;
+  margin-top: 20px;
+}
+
+div[style*="padding: 20px"] {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+p {
+  color: #666;
+}

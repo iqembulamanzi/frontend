@@ -1,0 +1,99 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    width: 90%;
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-section {
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.welcome-section h2 {
+    color: #007bff;
+    margin: 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background-color: #f0f8ff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    color: #1a1a1a;
+    margin: 0;
+    font-weight: 700;
+}
+
+.stat-title {
+    color: #666;
+    margin: 5px 0 0;
+    font-weight: 500;
+}
+
+.recent-activity-section {
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.recent-activity-section h3 {
+    color: #1a1a1a;
+    margin-bottom: 15px;
+}
+
+.activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-type {
+    font-weight: bold;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 5px;
+    margin-right: 15px;
+    min-width: 70px;
+    text-align: center;
+}
+
+.report {
+    background-color: #ffc107;
+}
+
+.job {
+    background-color: #28a745;
+}
+
+.activity-description {
+    color: #333;
+}

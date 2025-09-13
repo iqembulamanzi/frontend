@@ -12,7 +12,7 @@ const Home = () => {
   const [recentActivity, setRecentActivity] = useState([
     { id: 1, type: "Report", description: "New oil spill report in Sector 4." },
     { id: 2, type: "Job", description: "Cleanup assigned to Team Beta." },
-    { id: 3, type: "Report", description: "Suspicious water sample near River A." },
+    { id: 3, type: "Report", description: "Suspicious water sample near River B." },
     { id: 4, type: "Job", description: "Inspection task for Team Alpha." },
   ]);
 

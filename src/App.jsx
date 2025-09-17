@@ -8,6 +8,8 @@ import Chatbot from './components/Chatbot';
 import AssignJob from './components/AssignJob';
 import Stats from './components/Stats';
 import Home from './components/Home';
+import Login from './components/login';
+import Register from './components/Register';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
           <Link to="/chatbot" className="nav-link">Chatbot</Link>
           <Link to="/assign-job" className="nav-link">Assign Job</Link>
           <Link to="/stats" className="nav-link">Stats</Link>
+          <Link to="/login" className="nav-link">Login</Link>
+          <Link to="/register" className="nav-link">Register</Link>
         </nav>
 
         {/* Routing setup */}
@@ -31,6 +35,8 @@ function App() {
           <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/assign-job" element={<AssignJob />} />
           <Route path="/stats" element={<Stats />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
     </Router>

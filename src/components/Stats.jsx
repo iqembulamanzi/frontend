@@ -1,107 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Stats = () => {
-  // Dummy data for the charts and metrics
-  const barChartData = [
-    { name: 'Jan', value: 45 },
-    { name: 'Feb', value: 60 },
-    { name: 'Mar', value: 50 },
-    { name: 'Apr', value: 75 },
-    { name: 'May', value: 65 },
-    { name: 'Jun', value: 80 },
-  ];
+  const [barChartData, setBarChartData] = useState([]);
+  const [donutChartData, setDonutChartData] = useState([]);
+  const [metrics, setMetrics] = useState({
+    totalReports: 0,
+    activeTeams: 0,
+    avgQualityScore: 0,
+    fieldWorkers: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const donutChartData = [
-    { label: 'Oil Spills', value: 40, color: '#0284c7' }, // Sky-500
-    { label: 'Chemicals', value: 25, color: '#f59e0b' }, // Amber-500
-    { label: 'Plastics', value: 35, color: '#10b981' },  // Emerald-500
-  ];
+  const token = localStorage.getItem("token");
 
-  const totalReports = 1250;
-  const activeTeams = 15;
-  const avgQualityScore = 7.8;
-  const fieldWorkers = 75;
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/stats`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to fetch stats");
 
-  // Function to create a simple bar chart using SVG
-  const BarChart = ({ data }) => {
-    const maxVal = Math.max(...data.map(d => d.value));
-    const barWidth = 40;
-    const barSpacing = 20;
-    const chartHeight = 200;
-    const chartWidth = data.length * (barWidth + barSpacing);
+        setMetrics({
+          totalReports: data.totalReports,
+          activeTeams: data.activeTeams,
+          avgQualityScore: data.avgQualityScore,
+          fieldWorkers: data.fieldWorkers,
+        });
+        setBarChartData(data.reportsOverTime); // Array [{name: 'Jan', value: 45}, ...]
+        setDonutChartData(data.topPollutants); // Array [{label:'Oil Spills', value:40, color:'#0284c7'}, ...]
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    return (
-      <svg width="100%" height={chartHeight + 30} viewBox={`0 0 ${chartWidth} ${chartHeight + 30}`} preserveAspectRatio="xMidYMid meet">
-        {/* Y-axis labels */}
-        {[0, 25, 50, 75, 100].map(val => (
-          <text key={val} x="-5" y={chartHeight - (val / 100) * chartHeight} textAnchor="end" fontSize="12" fill="#6b7280">
-            {val}
-          </text>
-        ))}
-        {/* Bars */}
-        {data.map((d, i) => (
-          <React.Fragment key={d.name}>
-            <rect
-              x={i * (barWidth + barSpacing)}
-              y={chartHeight - (d.value / maxVal) * chartHeight}
-              width={barWidth}
-              height={(d.value / maxVal) * chartHeight}
-              fill="#3b82f6"
-              rx="5"
-              ry="5"
-            />
-            <text
-              x={i * (barWidth + barSpacing) + barWidth / 2}
-              y={chartHeight + 20}
-              textAnchor="middle"
-              fontSize="12"
-              fill="#333"
-            >
-              {d.name}
-            </text>
-          </React.Fragment>
-        ))}
-      </svg>
-    );
-  };
+    fetchStats();
+  }, [token]);
 
-  // Function to create a simple donut chart using SVG
-  const DonutChart = ({ data, size = 200, strokeWidth = 30 }) => {
-    const sum = data.reduce((acc, curr) => acc + curr.value, 0);
-    let cumulative = 0;
-    return (
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        <circle cx={size / 2} cy={size / 2} r={(size - strokeWidth) / 2} fill="transparent" stroke="#e5e7eb" strokeWidth={strokeWidth} />
-        {data.map((d, i) => {
-          const circumference = (size - strokeWidth) * Math.PI;
-          const offset = circumference * (1 - d.value / sum);
-          const dasharray = `${circumference - offset} ${offset}`;
-          const rotate = (cumulative / sum) * 360;
-          cumulative += d.value;
-          return (
-            <circle
-              key={i}
-              cx={size / 2}
-              cy={size / 2}
-              r={(size - strokeWidth) / 2}
-              fill="transparent"
-              stroke={d.color}
-              strokeWidth={strokeWidth}
-              strokeDasharray={dasharray}
-              strokeDashoffset={circumference}
-              transform={`rotate(${rotate} ${size / 2} ${size / 2})`}
-            />
-          );
-        })}
-        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fontSize="24" fill="#333" fontWeight="bold">
-          {Math.round(donutChartData[0].value / sum * 100)}%
-        </text>
-        <text x="50%" y="70%" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="#6b7280">
-          {donutChartData[0].label}
-        </text>
-      </svg>
-    );
-  };
+  if (loading) return <p>Loading statistics...</p>;
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
     <div className="flex flex-col items-center justify-center p-6 bg-gray-50 min-h-screen">
@@ -114,19 +55,19 @@ const Stats = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
           <div className="bg-white p-6 rounded-xl shadow-lg transform transition duration-500 hover:scale-105">
             <h3 className="text-xl font-semibold text-gray-600">Total Reports</h3>
-            <p className="text-5xl font-bold text-blue-600 mt-2">{totalReports}</p>
+            <p className="text-5xl font-bold text-blue-600 mt-2">{metrics.totalReports}</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-lg transform transition duration-500 hover:scale-105">
             <h3 className="text-xl font-semibold text-gray-600">Active Teams</h3>
-            <p className="text-5xl font-bold text-green-600 mt-2">{activeTeams}</p>
+            <p className="text-5xl font-bold text-green-600 mt-2">{metrics.activeTeams}</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-lg transform transition duration-500 hover:scale-105">
             <h3 className="text-xl font-semibold text-gray-600">Avg. Quality Score</h3>
-            <p className="text-5xl font-bold text-yellow-500 mt-2">{avgQualityScore}</p>
+            <p className="text-5xl font-bold text-yellow-500 mt-2">{metrics.avgQualityScore}</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-lg transform transition duration-500 hover:scale-105">
             <h3 className="text-xl font-semibold text-gray-600">Field Workers</h3>
-            <p className="text-5xl font-bold text-purple-600 mt-2">{fieldWorkers}</p>
+            <p className="text-5xl font-bold text-purple-600 mt-2">{metrics.fieldWorkers}</p>
           </div>
         </div>
 
@@ -161,5 +102,7 @@ const Stats = () => {
     </div>
   );
 };
+
+// Keep your BarChart & DonutChart components as before
 
 export default Stats;

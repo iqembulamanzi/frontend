@@ -1,30 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './AssignJob.css';
 
 const AssignJob = () => {
   const [jobTitle, setJobTitle] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [assignedTeam, setAssignedTeam] = useState("");
-  const [jobs, setJobs] = useState([
-    { id: 1, title: "River A Cleanup", description: "Remove debris and collect water samples.", team: "Team Alpha" },
-    { id: 2, title: "Sector 4 Monitoring", description: "Monitor water quality sensors and report anomalies.", team: "Team Beta" },
-  ]);
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const handleAssignJob = (e) => {
+  const token = localStorage.getItem("token");
+
+  // Fetch jobs from backend
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/jobs`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to fetch jobs");
+        setJobs(data.jobs);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchJobs();
+  }, [token]);
+
+  // Assign new job
+  const handleAssignJob = async (e) => {
     e.preventDefault();
-    if (jobTitle && jobDescription && assignedTeam) {
-      const newJob = {
-        id: jobs.length + 1,
-        title: jobTitle,
-        description: jobDescription,
-        team: assignedTeam,
-      };
-      setJobs([...jobs, newJob]);
+    if (!jobTitle || !jobDescription || !assignedTeam) return;
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/jobs`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ title: jobTitle, description: jobDescription, team: assignedTeam }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to assign job");
+      setJobs([...jobs, data.job]);
       setJobTitle("");
       setJobDescription("");
       setAssignedTeam("");
+    } catch (err) {
+      setError(err.message);
     }
   };
+
+  if (loading) return <p>Loading jobs...</p>;
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
     <div className="assign-job-container">

@@ -1,41 +1,91 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Admin.css';
 
 const Admin = () => {
-  // Placeholder user data
-  const [users, setUsers] = useState([
-    { id: 1, name: "Alice", role: "Admin" },
-    { id: 2, name: "Bob", role: "Team Lead" },
-    { id: 3, name: "Charlie", role: "Field Worker" },
-    { id: 4, name: "Dana", role: "Field Worker" },
-  ]);
-
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [newName, setNewName] = useState("");
   const [newRole, setNewRole] = useState("Field Worker");
 
-  const handleAddUser = (e) => {
+  const token = localStorage.getItem("token");
+
+  // Fetch users from backend
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to fetch users");
+        setUsers(data.users);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUsers();
+  }, [token]);
+
+  // Add new user
+  const handleAddUser = async (e) => {
     e.preventDefault();
-    if (newName) {
-      const newUser = {
-        id: users.length + 1,
-        name: newName,
-        role: newRole,
-      };
-      setUsers([...users, newUser]);
+    if (!newName) return;
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name: newName, role: newRole }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to add user");
+      setUsers([...users, data.user]);
       setNewName("");
       setNewRole("Field Worker");
+    } catch (err) {
+      setError(err.message);
     }
   };
 
-  const handleRoleChange = (id, newRole) => {
-    setUsers(users.map(user =>
-      user.id === id ? { ...user, role: newRole } : user
-    ));
+  // Update role
+  const handleRoleChange = async (id, role) => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ role }),
+      });
+      if (!res.ok) throw new Error("Failed to update role");
+      setUsers(users.map(u => (u.id === id ? { ...u, role } : u)));
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
-  const handleDeleteUser = (id) => {
-    setUsers(users.filter(user => user.id !== id));
+  // Delete user
+  const handleDeleteUser = async (id) => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Failed to delete user");
+      setUsers(users.filter(u => u.id !== id));
+    } catch (err) {
+      setError(err.message);
+    }
   };
+
+  if (loading) return <p>Loading users...</p>;
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
     <div className="admin-container">

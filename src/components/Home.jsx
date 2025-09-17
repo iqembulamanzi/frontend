@@ -1,20 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Home.css';
 
 const Home = () => {
-  // Placeholder data for demonstration
-  const [stats, setStats] = useState([
-    { title: "Active Reports", value: 12 },
-    { title: "Jobs Assigned", value: 5 },
-    { title: "Teams Active", value: 8 },
-  ]);
+  const [stats, setStats] = useState([]);
+  const [recentActivity, setRecentActivity] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const [recentActivity, setRecentActivity] = useState([
-    { id: 1, type: "Report", description: "New oil spill report in Sector 4." },
-    { id: 2, type: "Job", description: "Cleanup assigned to Team Beta." },
-    { id: 3, type: "Report", description: "Suspicious water sample near River A." },
-    { id: 4, type: "Job", description: "Inspection task for Team Alpha." },
-  ]);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/dashboard`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to fetch dashboard data");
+
+        setStats(data.stats); // Expecting: [{ title: "Active Reports", value: 12 }, ...]
+        setRecentActivity(data.recentActivity); // Expecting: [{ id: 1, type: "Report", description: "..." }, ...]
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, [token]);
+
+  if (loading) return <p>Loading dashboard...</p>;
+  if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
 
   return (
     <div className="home-container">
@@ -34,14 +54,20 @@ const Home = () => {
 
       <div className="recent-activity-section">
         <h3>Recent Activity</h3>
-        <ul className="activity-list">
-          {recentActivity.map((activity) => (
-            <li key={activity.id} className="activity-item">
-              <span className={`activity-type ${activity.type.toLowerCase()}`}>{activity.type}</span>
-              <span className="activity-description">{activity.description}</span>
-            </li>
-          ))}
-        </ul>
+        {recentActivity.length === 0 ? (
+          <p>No recent activity</p>
+        ) : (
+          <ul className="activity-list">
+            {recentActivity.map((activity) => (
+              <li key={activity.id} className="activity-item">
+                <span className={`activity-type ${activity.type.toLowerCase()}`}>
+                  {activity.type}
+                </span>
+                <span className="activity-description">{activity.description}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

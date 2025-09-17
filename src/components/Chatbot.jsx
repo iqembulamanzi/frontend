@@ -10,8 +10,9 @@ const Chatbot = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioURL, setAudioURL] = useState(null);
   const [recorder, setRecorder] = useState(null);
+  const [submitMessage, setSubmitMessage] = useState("");
 
-  // Get user's geolocation when the component loads
+  // Get user location safely
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -22,25 +23,24 @@ const Chatbot = () => {
           });
         },
         (error) => {
-          console.error("Geolocation error:", error);
-          setLocation(null); // Explicitly set location to null if permission is denied.
+          console.warn("Geolocation error:", error);
+          setLocation(null);
         }
       );
     }
   }, []);
 
-  // Handle media file selection
+  // Handle file upload
   const handleFileChange = (event) => {
     setMediaFile(event.target.files[0]);
+    setAudioURL(null); // reset audio preview if new file
   };
 
-  // Handle voice recording
+  // Toggle voice recording
   const toggleRecording = () => {
     if (isRecording) {
-      if (recorder) {
-        recorder.stop();
-        setIsRecording(false);
-      }
+      recorder?.stop();
+      setIsRecording(false);
     } else {
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then((stream) => {
@@ -50,40 +50,69 @@ const Chatbot = () => {
           newRecorder.ondataavailable = (e) => chunks.push(e.data);
           newRecorder.onstop = () => {
             const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
-            const url = URL.createObjectURL(blob);
-            setAudioURL(url);
+            setAudioURL(URL.createObjectURL(blob));
             setMediaFile(blob);
           };
           newRecorder.start();
           setIsRecording(true);
         })
         .catch((err) => {
-          console.error("Could not access microphone:", err);
+          console.error("Microphone access error:", err);
+          setSubmitMessage("Microphone access denied.");
         });
     }
   };
 
-  const handleSubmit = (event) => {
+  // Submit report safely
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const reportData = {
-      comment,
-      reportType,
-      level,
-      location,
-      timestamp: new Date().toISOString(),
-      mediaFile: mediaFile ? mediaFile.name : null,
-    };
-    console.log("Submitting report:", reportData);
+    setSubmitMessage("");
+
+    try {
+      const backendUrl = process.env.REACT_APP_BACKEND_URL;
+      if (!backendUrl) throw new Error("Backend URL is not defined");
+
+      const formData = new FormData();
+      formData.append("comment", comment);
+      formData.append("reportType", reportType);
+      formData.append("level", level);
+      if (location) {
+        formData.append("latitude", location.latitude);
+        formData.append("longitude", location.longitude);
+      }
+      if (mediaFile) formData.append("mediaFile", mediaFile);
+
+      const res = await fetch(`${backendUrl}/api/reports`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to submit report");
+
+      // Reset form
+      setComment("");
+      setReportType("pipe-burst");
+      setLevel("low");
+      setMediaFile(null);
+      setAudioURL(null);
+      setSubmitMessage("Report submitted successfully!");
+    } catch (err) {
+      console.error(err);
+      setSubmitMessage(`Error submitting report: ${err.message}`);
+    }
   };
 
   return (
     <div className="chatbot-container">
       <div className="chatbot-header">
         <h2>New Report</h2>
-        <p>Hello! What would you like to report?</p>
-        <p>You can select a report type below and add details, including a picture or a voice message.</p>
+        <p>Fill in the details below to submit a water pollution report.</p>
         {location && (
-          <p>Your location has been captured: Lat {location.latitude.toFixed(2)}, Lon {location.longitude.toFixed(2)}.</p>
+          <p>Your location: Lat {location.latitude.toFixed(2)}, Lon {location.longitude.toFixed(2)}</p>
         )}
       </div>
 
@@ -101,18 +130,18 @@ const Chatbot = () => {
         <div className="form-group">
           <label>Pollution Level</label>
           <div className="radio-group">
-            <label>
-              <input type="radio" name="level" value="low" checked={level === "low"} onChange={(e) => setLevel(e.target.value)} />
-              Low
-            </label>
-            <label>
-              <input type="radio" name="level" value="medium" checked={level === "medium"} onChange={(e) => setLevel(e.target.value)} />
-              Medium
-            </label>
-            <label>
-              <input type="radio" name="level" value="high" checked={level === "high"} onChange={(e) => setLevel(e.target.value)} />
-              High
-            </label>
+            {["low", "medium", "high"].map((lvl) => (
+              <label key={lvl}>
+                <input
+                  type="radio"
+                  name="level"
+                  value={lvl}
+                  checked={level === lvl}
+                  onChange={(e) => setLevel(e.target.value)}
+                />
+                {lvl.charAt(0).toUpperCase() + lvl.slice(1)}
+              </label>
+            ))}
           </div>
         </div>
 
@@ -128,7 +157,7 @@ const Chatbot = () => {
 
         <div className="button-group">
           <label htmlFor="media-upload" className="media-button">
-            Take Picture/Video
+            Upload Picture/Video
             <input
               id="media-upload"
               type="file"
@@ -138,6 +167,7 @@ const Chatbot = () => {
               className="hidden-input"
             />
           </label>
+
           <button
             type="button"
             className={`media-button ${isRecording ? "recording-active" : ""}`}
@@ -146,16 +176,18 @@ const Chatbot = () => {
             {isRecording ? "Stop Recording" : "Record Voice Note"}
           </button>
         </div>
-        
+
         {mediaFile && (
           <div className="file-preview">
-            <span>Selected File: {mediaFile.name}</span>
-            {audioURL && (
-              <audio controls className="audio-player">
-                <source src={audioURL} type="audio/ogg" />
-              </audio>
-            )}
+            <span>Selected File: {mediaFile.name || "Voice Recording"}</span>
+            {audioURL && <audio controls className="audio-player" src={audioURL} />}
           </div>
+        )}
+
+        {submitMessage && (
+          <p className={submitMessage.startsWith("Error") ? "text-red-600" : "text-green-600"}>
+            {submitMessage}
+          </p>
         )}
 
         <button type="submit" className="submit-button">

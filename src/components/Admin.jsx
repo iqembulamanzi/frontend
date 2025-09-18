@@ -1,104 +1,226 @@
-import React, { useState } from "react";
-import './Admin.css';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./Admin.css"; // We'll create this CSS file
 
-const Admin = () => {
-  // Placeholder user data
-  const [users, setUsers] = useState([
-    { id: 1, name: "Alice", role: "Admin" },
-    { id: 2, name: "Bob", role: "Team Lead" },
-    { id: 3, name: "Charlie", role: "Field Worker" },
-    { id: 4, name: "Dana", role: "Field Worker" },
-  ]);
+const Admin = ({ user }) => {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [incidents, setIncidents] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [reports, setReports] = useState([]);
 
-  const [newName, setNewName] = useState("");
-  const [newRole, setNewRole] = useState("Field Worker");
-
-  const handleAddUser = (e) => {
-    e.preventDefault();
-    if (newName) {
-      const newUser = {
-        id: users.length + 1,
-        name: newName,
-        role: newRole,
-      };
-      setUsers([...users, newUser]);
-      setNewName("");
-      setNewRole("Field Worker");
+  // Check if user is admin, redirect if not
+  useEffect(() => {
+    if (user !== "admin") {
+      navigate("/");
     }
-  };
+  }, [user, navigate]);
 
-  const handleRoleChange = (id, newRole) => {
-    setUsers(users.map(user =>
-      user.id === id ? { ...user, role: newRole } : user
-    ));
-  };
+  // Mock data - in a real app, this would come from an API
+  useEffect(() => {
+    // Simulate fetching data
+    setIncidents([
+      { id: 1, location: "Main St", status: "Active", priority: "High", reported: "2023-04-15" },
+      { id: 2, location: "Oak Ave", status: "Resolved", priority: "Medium", reported: "2023-04-10" },
+      { id: 3, location: "Pine Rd", status: "Investigating", priority: "Low", reported: "2023-04-18" },
+    ]);
 
-  const handleDeleteUser = (id) => {
-    setUsers(users.filter(user => user.id !== id));
+    setUsers([
+      { id: 1, name: "John Doe", email: "john@example.com", role: "Operator", lastLogin: "2023-04-20" },
+      { id: 2, name: "Jane Smith", email: "jane@example.com", role: "Viewer", lastLogin: "2023-04-19" },
+      { id: 3, name: "Bob Johnson", email: "bob@example.com", role: "Admin", lastLogin: "2023-04-21" },
+    ]);
+
+    setReports([
+      { id: 1, title: "Monthly Performance", generated: "2023-04-01", downloads: 42 },
+      { id: 2, title: "Incident Summary", generated: "2023-04-15", downloads: 28 },
+      { id: 3, title: "System Health", generated: "2023-04-10", downloads: 35 },
+    ]);
+  }, []);
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "dashboard":
+        return (
+          <div className="admin-dashboard">
+            <h2>Admin Dashboard</h2>
+            <div className="admin-stats">
+              <div className="admin-stat-card">
+                <h3>{incidents.length}</h3>
+                <p>Total Incidents</p>
+              </div>
+              <div className="admin-stat-card">
+                <h3>{users.length}</h3>
+                <p>System Users</p>
+              </div>
+              <div className="admin-stat-card">
+                <h3>{reports.length}</h3>
+                <p>Generated Reports</p>
+              </div>
+            </div>
+          </div>
+        );
+      case "incidents":
+        return (
+          <div className="admin-incidents">
+            <h2>Incident Management</h2>
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Location</th>
+                  <th>Status</th>
+                  <th>Priority</th>
+                  <th>Reported</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {incidents.map(incident => (
+                  <tr key={incident.id}>
+                    <td>{incident.id}</td>
+                    <td>{incident.location}</td>
+                    <td>
+                      <span className={`status-badge status-${incident.status.toLowerCase()}`}>
+                        {incident.status}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`priority-badge priority-${incident.priority.toLowerCase()}`}>
+                        {incident.priority}
+                      </span>
+                    </td>
+                    <td>{incident.reported}</td>
+                    <td>
+                      <button className="action-btn view-btn">View</button>
+                      <button className="action-btn edit-btn">Edit</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      case "users":
+        return (
+          <div className="admin-users">
+            <h2>User Management</h2>
+            <button className="add-user-btn">Add New User</button>
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Last Login</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map(user => (
+                  <tr key={user.id}>
+                    <td>{user.id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.role}</td>
+                    <td>{user.lastLogin}</td>
+                    <td>
+                      <button className="action-btn edit-btn">Edit</button>
+                      <button className="action-btn delete-btn">Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      case "reports":
+        return (
+          <div className="admin-reports">
+            <h2>Report Management</h2>
+            <button className="generate-report-btn">Generate New Report</button>
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Generated</th>
+                  <th>Downloads</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reports.map(report => (
+                  <tr key={report.id}>
+                    <td>{report.id}</td>
+                    <td>{report.title}</td>
+                    <td>{report.generated}</td>
+                    <td>{report.downloads}</td>
+                    <td>
+                      <button className="action-btn download-btn">Download</button>
+                      <button className="action-btn delete-btn">Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      default:
+        return <div>Select a tab</div>;
+    }
   };
 
   return (
     <div className="admin-container">
-      <h2>User Management</h2>
+      <header className="admin-header">
+        <h1>Sewer System Admin Panel</h1>
+        <div className="admin-header-actions">
+          <span>Welcome, {user}</span>
+          <Link to="/" className="nav-link">Back to Home</Link>
+        </div>
+      </header>
 
-      <div className="admin-form-section">
-        <h3>Add New User</h3>
-        <form onSubmit={handleAddUser} className="admin-form">
-          <input
-            type="text"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            placeholder="Enter new user's name"
-            required
-          />
-          <select value={newRole} onChange={(e) => setNewRole(e.target.value)}>
-            <option value="Admin">Admin</option>
-            <option value="Team Lead">Team Lead</option>
-            <option value="Field Worker">Field Worker</option>
-          </select>
-          <button type="submit" className="add-user-btn">Add User</button>
-        </form>
-      </div>
+      <div className="admin-content">
+        <aside className="admin-sidebar">
+          <nav className="admin-nav">
+            <button 
+              className={`admin-nav-btn ${activeTab === "dashboard" ? "active" : ""}`}
+              onClick={() => setActiveTab("dashboard")}
+            >
+              Dashboard
+            </button>
+            <button 
+              className={`admin-nav-btn ${activeTab === "incidents" ? "active" : ""}`}
+              onClick={() => setActiveTab("incidents")}
+            >
+              Incidents
+            </button>
+            <button 
+              className={`admin-nav-btn ${activeTab === "users" ? "active" : ""}`}
+              onClick={() => setActiveTab("users")}
+            >
+              Users
+            </button>
+            <button 
+              className={`admin-nav-btn ${activeTab === "reports" ? "active" : ""}`}
+              onClick={() => setActiveTab("reports")}
+            >
+              Reports
+            </button>
+            <button 
+              className={`admin-nav-btn ${activeTab === "settings" ? "active" : ""}`}
+              onClick={() => setActiveTab("settings")}
+            >
+              Settings
+            </button>
+          </nav>
+        </aside>
 
-      <div className="user-list-section">
-        <h3>Current Users</h3>
-        <table className="user-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Role</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>
-                  <select
-                    value={user.role}
-                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                    className="role-select"
-                  >
-                    <option value="Admin">Admin</option>
-                    <option value="Team Lead">Team Lead</option>
-                    <option value="Field Worker">Field Worker</option>
-                  </select>
-                </td>
-                <td>
-                  <button
-                    onClick={() => handleDeleteUser(user.id)}
-                    className="delete-user-btn"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <main className="admin-main">
+          {renderTabContent()}
+        </main>
       </div>
     </div>
   );

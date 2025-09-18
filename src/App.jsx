@@ -3,13 +3,13 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 
 // Import all components from the components folder and the Reports page
-import Admin from './components/Admin';
-import Chatbot from './components/Chatbot';
-import AssignJob from './components/AssignJob';
-import Stats from './components/Stats';
-import Home from './components/Home';
-import Login from './components/login';
-import Register from './components/Register';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import Admin from './components/users/Admin';
+import Home from './components/incidents/Home';
+import Stats from './components/incidents/Stats';
+import Chatbot from './components/incidents/Chatbot';
+import AssignJob from './components/jobs/AssignJob';
 
 function App() {
   return (
@@ -24,8 +24,8 @@ function App() {
           <Link to="/chatbot" className="nav-link">Chatbot</Link>
           <Link to="/assign-job" className="nav-link">Assign Job</Link>
           <Link to="/stats" className="nav-link">Stats</Link>
-          <Link to="/login" className="nav-link">Login</Link>
-          <Link to="/register" className="nav-link">Register</Link>
+          <Link to="/Login" className="nav-link">Login</Link>
+          <Link to="/Register" className="nav-link">Register</Link>
         </nav>
 
         {/* Routing setup */}

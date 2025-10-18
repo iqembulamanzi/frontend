@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./Admin.css"; // We'll create this CSS file
+import "./Admin.css";
 
 const Admin = ({ user }) => {
   const navigate = useNavigate();
@@ -8,6 +8,15 @@ const Admin = ({ user }) => {
   const [incidents, setIncidents] = useState([]);
   const [users, setUsers] = useState([]);
   const [reports, setReports] = useState([]);
+  
+  // Admin details - in a real app, this would come from authentication
+  const [adminDetails] = useState({
+    name: "Admin User",
+    staffNumber: "ADM-2024-001",
+    role: "System Administrator",
+    department: "Infrastructure Management",
+    lastLogin: new Date().toLocaleDateString()
+  });
 
   // Check if user is admin, redirect if not
   useEffect(() => {
@@ -16,9 +25,8 @@ const Admin = ({ user }) => {
     }
   }, [user, navigate]);
 
-  // Mock data - in a real app, this would come from an API
+  // Mock data
   useEffect(() => {
-    // Simulate fetching data
     setIncidents([
       { id: 1, location: "Main St", status: "Active", priority: "High", reported: "2023-04-15" },
       { id: 2, location: "Oak Ave", status: "Resolved", priority: "Medium", reported: "2023-04-10" },
@@ -44,16 +52,16 @@ const Admin = ({ user }) => {
         return (
           <div className="admin-dashboard">
             <h2>Admin Dashboard</h2>
-            <div className="admin-stats">
-              <div className="admin-stat-card">
+            <div className="stats-preview">
+              <div className="stat-card">
                 <h3>{incidents.length}</h3>
                 <p>Total Incidents</p>
               </div>
-              <div className="admin-stat-card">
+              <div className="stat-card">
                 <h3>{users.length}</h3>
                 <p>System Users</p>
               </div>
-              <div className="admin-stat-card">
+              <div className="stat-card">
                 <h3>{reports.length}</h3>
                 <p>Generated Reports</p>
               </div>
@@ -105,7 +113,7 @@ const Admin = ({ user }) => {
         return (
           <div className="admin-users">
             <h2>User Management</h2>
-            <button className="add-user-btn">Add New User</button>
+            <button className="login-btn">Add New User</button>
             <table className="admin-table">
               <thead>
                 <tr>
@@ -139,7 +147,7 @@ const Admin = ({ user }) => {
         return (
           <div className="admin-reports">
             <h2>Report Management</h2>
-            <button className="generate-report-btn">Generate New Report</button>
+            <button className="login-btn">Generate New Report</button>
             <table className="admin-table">
               <thead>
                 <tr>
@@ -174,11 +182,24 @@ const Admin = ({ user }) => {
 
   return (
     <div className="admin-container">
+      {/* New Admin Header with Details */}
       <header className="admin-header">
-        <h1>Sewer System Admin Panel</h1>
-        <div className="admin-header-actions">
-          <span>Welcome, {user}</span>
-          <Link to="/" className="nav-link">Back to Home</Link>
+        <div className="admin-brand">
+          <h1>Sewer System Admin Panel</h1>
+        </div>
+        
+        <div className="admin-profile">
+          <div className="admin-info">
+            <div className="admin-name">{adminDetails.name}</div>
+            <div className="admin-details">
+              <span className="staff-id">Staff ID: {adminDetails.staffNumber}</span>
+              <span className="admin-role">{adminDetails.role}</span>
+              <span className="admin-department">{adminDetails.department}</span>
+            </div>
+          </div>
+          <div className="admin-actions">
+            <Link to="/" className="nav-link login-btn">Back to Home</Link>
+          </div>
         </div>
       </header>
 
@@ -189,37 +210,33 @@ const Admin = ({ user }) => {
               className={`admin-nav-btn ${activeTab === "dashboard" ? "active" : ""}`}
               onClick={() => setActiveTab("dashboard")}
             >
-              Dashboard
+              📊 Dashboard
             </button>
             <button 
               className={`admin-nav-btn ${activeTab === "incidents" ? "active" : ""}`}
               onClick={() => setActiveTab("incidents")}
             >
-              Incidents
+              🚨 Incidents
             </button>
             <button 
               className={`admin-nav-btn ${activeTab === "users" ? "active" : ""}`}
               onClick={() => setActiveTab("users")}
             >
-              Users
+              👥 Users
             </button>
             <button 
               className={`admin-nav-btn ${activeTab === "reports" ? "active" : ""}`}
               onClick={() => setActiveTab("reports")}
             >
-              Reports
-            </button>
-            <button 
-              className={`admin-nav-btn ${activeTab === "settings" ? "active" : ""}`}
-              onClick={() => setActiveTab("settings")}
-            >
-              Settings
+              📋 Reports
             </button>
           </nav>
         </aside>
 
-        <main className="admin-main">
-          {renderTabContent()}
+        <main className="home-main admin-main">
+          <div className="hero-content">
+            {renderTabContent()}
+          </div>
         </main>
       </div>
     </div>

@@ -6,17 +6,20 @@
   width: 90%;
   max-width: 900px;
   margin: 0 auto;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 188, 212, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .admin-form-section,
 .user-list-section {
   padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  background: rgba(224, 247, 250, 0.8);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 188, 212, 0.1);
+  border: 1px solid rgba(0, 188, 212, 0.1);
 }
 
 .admin-form {
@@ -28,17 +31,33 @@
 .admin-form input,
 .admin-form select {
   padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  border-radius: 8px;
+  border: 2px solid var(--water-light);
+  background-color: rgba(255, 255, 255, 0.8);
+  color: var(--water-text);
+  transition: border-color 0.3s ease;
+}
+
+.admin-form input:focus,
+.admin-form select:focus {
+  border-color: var(--water-primary);
+  outline: none;
 }
 
 .add-user-btn {
   padding: 10px 15px;
-  background-color: #28a745;
+  background: linear-gradient(135deg, var(--water-primary), var(--water-secondary));
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3);
+}
+
+.add-user-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4);
 }
 
 .user-table {
@@ -75,4 +94,27 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.role-select {
+  padding: 5px;
+  border-radius: 6px;
+  border: 1px solid var(--water-light);
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.delete-user-btn {
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #d32f2f, #b71c1c);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(211, 47, 47, 0.3);
+}
+
+.delete-user-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
 }

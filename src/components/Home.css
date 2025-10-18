@@ -6,20 +6,23 @@
     width: 90%;
     max-width: 900px;
     margin: 0 auto;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 188, 212, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .welcome-section {
     text-align: center;
     padding-bottom: 20px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid rgba(0, 188, 212, 0.2);
 }
 
 .welcome-section h2 {
-    color: #007bff;
+    color: var(--water-primary);
     margin: 0;
+    text-shadow: 0 1px 2px rgba(0, 188, 212, 0.2);
 }
 
 .stats-grid {
@@ -29,34 +32,43 @@
 }
 
 .stat-card {
-    background-color: #f0f8ff;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(224, 247, 250, 0.8));
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 15px;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.1);
+    border: 1px solid rgba(0, 188, 212, 0.1);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 188, 212, 0.2);
 }
 
 .stat-value {
     font-size: 2.5rem;
-    color: #1a1a1a;
+    color: var(--water-dark);
     margin: 0;
     font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 188, 212, 0.1);
 }
 
 .stat-title {
-    color: #666;
+    color: var(--water-text);
     margin: 5px 0 0;
     font-weight: 500;
 }
 
 .recent-activity-section {
     padding-top: 20px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid rgba(0, 188, 212, 0.2);
 }
 
 .recent-activity-section h3 {
-    color: #1a1a1a;
+    color: var(--water-dark);
     margin-bottom: 15px;
+    text-shadow: 0 1px 2px rgba(0, 188, 212, 0.1);
 }
 
 .activity-list {
@@ -68,8 +80,15 @@
 .activity-item {
     display: flex;
     align-items: center;
-    padding: 12px;
-    border-bottom: 1px solid #eee;
+    padding: 15px;
+    border-bottom: 1px solid rgba(0, 188, 212, 0.1);
+    transition: background-color 0.3s ease;
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+.activity-item:hover {
+    background: rgba(0, 188, 212, 0.05);
 }
 
 .activity-item:last-child {
@@ -79,21 +98,19 @@
 .activity-type {
     font-weight: bold;
     color: #fff;
-    padding: 4px 8px;
-    border-radius: 5px;
+    padding: 6px 12px;
+    border-radius: 20px;
     margin-right: 15px;
     min-width: 70px;
     text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.report {
-    background-color: #ffc107;
-}
-
-.job {
-    background-color: #28a745;
+.incident {
+    background: linear-gradient(135deg, var(--water-primary), var(--water-secondary));
 }
 
 .activity-description {
-    color: #333;
+    color: var(--water-text);
+    font-weight: 500;
 }

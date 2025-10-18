@@ -13,14 +13,14 @@ const Home = () => {
     const fetchDashboardData = async () => {
       try {
         // Fetch incidents
-        const incidentsRes = await fetch('/api/incidents', {
+        const incidentsRes = await fetch('http://127.0.0.1:3000/api/incidents', {
           headers: { Authorization: `Bearer ${token}` },
         });
         const incidentsData = await incidentsRes.json();
         if (!incidentsRes.ok) throw new Error(incidentsData.message || "Failed to fetch incidents");
 
         // Fetch users
-        const usersRes = await fetch('/users', {
+        const usersRes = await fetch('http://127.0.0.1:3000/api/users', {
           headers: { Authorization: `Bearer ${token}` },
         });
         const usersData = await usersRes.json();
@@ -39,9 +39,9 @@ const Home = () => {
 
         // Recent activity: last 5 incidents
         const recentIncidents = incidentsData.slice(-5).map(inc => ({
-          id: inc._id,
+          id: inc.id,
           type: "Incident",
-          description: `${inc.category} reported - ${inc.status}`,
+          description: `${inc.title} reported - ${inc.status}`,
         }));
         setRecentActivity(recentIncidents);
       } catch (err) {

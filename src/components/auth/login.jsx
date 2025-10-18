@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,7 +14,7 @@ const Login = () => {
 
     try {
       console.log('Attempting login with:', { email, password });
-      const res = await fetch('/login',{
+      const res = await fetch('http://127.0.0.1:3000/api/auth/login',{
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,7 +33,7 @@ const Login = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
         // redirect or update UI after login
-        window.location.href = "/home";
+        window.location.href = "/";
       }
     } catch (err) {
       console.error('Login fetch error:', err);
@@ -43,29 +44,31 @@ const Login = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Login</h1>
+    <div className="login-container">
+      <h1 className="login-title">Login</h1>
       <form onSubmit={handleLogin}>
-        <div>
-          <label>Email:</label><br />
+        <div className="form-group">
+          <label className="form-label">Email:</label>
           <input
             type="email"
+            className="form-input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label>Password:</label><br />
+        <div className="form-group">
+          <label className="form-label">Password:</label>
           <input
             type="password"
+            className="form-input"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit" style={{ marginTop: "10px" }} disabled={loading}>
+        {error && <p className="error-message">{error}</p>}
+        <button type="submit" className="login-button" disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>

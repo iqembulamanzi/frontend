@@ -5,12 +5,20 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 50%, #80deea 100%);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Water theme variables */
+  --water-primary: #00bcd4;
+  --water-secondary: #26c6da;
+  --water-accent: #4dd0e1;
+  --water-light: #e0f7fa;
+  --water-dark: #006064;
+  --water-text: #004d40;
 }
 
 a {
@@ -56,13 +64,106 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: var(--water-text);
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 50%, #80deea 100%);
   }
   a:hover {
-    color: #747bff;
+    color: var(--water-primary);
   }
   button {
-    background-color: #f9f9f9;
+    background-color: var(--water-light);
+    border-color: var(--water-primary);
+    color: var(--water-text);
+  }
+  button:hover {
+    background-color: var(--water-primary);
+    color: white;
+  }
+}
+
+/* Water-themed animations */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes wave {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.wave-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.wave-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: wave 2s infinite;
+}
+
+/* Responsive styles for tablets and smaller screens */
+@media (max-width: 768px) {
+  body {
+    min-width: 280px;
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 2.5em;
+    line-height: 1.2;
+  }
+
+  button {
+    padding: 0.5em 1em;
+    font-size: 0.95em;
+  }
+
+  .wave-effect::before {
+    animation-duration: 1.5s;
+  }
+}
+
+/* Responsive styles for phones */
+@media (max-width: 480px) {
+  body {
+    min-width: 240px;
+    padding: 0.5rem;
+    place-items: start;
+  }
+
+  h1 {
+    font-size: 2em;
+    line-height: 1.3;
+  }
+
+  button {
+    padding: 0.4em 0.8em;
+    font-size: 0.9em;
+    border-radius: 6px;
+  }
+
+  a {
+    font-weight: 400;
+  }
+
+  .wave-effect::before {
+    animation-duration: 1s;
   }
 }

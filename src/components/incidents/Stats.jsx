@@ -23,7 +23,7 @@ const Stats = () => {
       try {
         // Fetch incidents
         const incidentsRes = await fetch(
-          '/api/incidents',
+          'http://127.0.0.1:3000/api/incidents',
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const incidentsData = await incidentsRes.json();
@@ -32,7 +32,7 @@ const Stats = () => {
 
         // Fetch users
         const usersRes = await fetch(
-          '/users',
+          'http://127.0.0.1:3000/api/users',
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const usersData = await usersRes.json();
@@ -64,7 +64,7 @@ const Stats = () => {
         // Generate donut chart data (category distribution)
         const categoryCounts = {};
         incidentsData.forEach((inc) => {
-          const cat = inc.category || "other";
+          const cat = inc.title || "other";
           categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
         });
 

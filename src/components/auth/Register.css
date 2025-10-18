@@ -1,0 +1,141 @@
+/* Register component styles */
+.register-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.register-title {
+  text-align: center;
+  color: var(--water-text);
+  margin-bottom: 1.5rem;
+  font-size: 2em;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--water-text);
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--water-light);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background: white;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--water-primary);
+  box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
+}
+
+.form-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--water-light);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: var(--water-primary);
+  box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
+}
+
+.error-message {
+  color: #d32f2f;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.success-message {
+  color: #388e3c;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.register-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--water-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.register-button:hover:not(:disabled) {
+  background: var(--water-secondary);
+  transform: translateY(-1px);
+}
+
+.register-button:disabled {
+  background: var(--water-light);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .register-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .register-title {
+    font-size: 1.8em;
+  }
+
+  .form-input,
+  .form-select {
+    padding: 0.6rem;
+  }
+
+  .register-button {
+    padding: 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+
+  .register-title {
+    font-size: 1.5em;
+  }
+
+  .form-input,
+  .form-select {
+    padding: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .register-button {
+    padding: 0.5rem;
+    font-size: 0.95rem;
+  }
+}

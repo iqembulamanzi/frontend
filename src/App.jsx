@@ -21,7 +21,7 @@ function App() {
         <nav className="main-nav">
           <Link to="/" className="nav-link">Home</Link>
           <Link to="/admin" className="nav-link">Admin</Link>
-          <Link to="/chatbot" className="nav-link">Chatbot</Link>
+          <Link to="/chatbot" className="nav-link">REPORT</Link>
           <Link to="/assign-job" className="nav-link">Assign Job</Link>
           <Link to="/stats" className="nav-link">Stats</Link>
           <Link to="/Login" className="nav-link">Login</Link>

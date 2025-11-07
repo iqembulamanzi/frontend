@@ -13,7 +13,7 @@ function App() {
       {/* Remove any container divs that might have padding/margin */}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin" element={<Admin user= "admin" />} />
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/assign-job" element={<AssignJob />} />
         <Route path="/stats" element={<Stats />} />

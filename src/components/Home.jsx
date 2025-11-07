@@ -1,15 +1,26 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import "./Home.css";
 
 const Home = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   const handleLogin = (userType) => {
     setUser(userType);
-    // You can redirect or change state based on user type
+
+    // You can redirect or change state based on user
+    //  type
+ if (userType === "admin") {
+      navigate("/admin"); // Redirect to admin page
+    } else if (userType === "clerk") {
+      // You can add clerk redirect here if needed
+      console.log("Clerk logged in");
+    }
+
+
     console.log(`Logged in as: ${userType}`);
   };
 

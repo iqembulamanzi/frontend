@@ -120,7 +120,6 @@
   transform: translateY(-1px);
 }
 
-
 /* Enhanced Sidebar */
 .admin-content-enhanced {
   display: flex;
@@ -1294,4 +1293,165 @@
 .status-tag-modal.available {
   background: rgba(46, 204, 113, 0.2);
   color: #2ecc71;
+}
+
+/* Team Management Styles - Same vibe as Incidents */
+.team-section-enhanced {
+  padding: 0;
+}
+
+.team-grid-enhanced {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.team-member-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.team-member-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.team-member-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.member-identity {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.member-avatar-large {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.availability-dot-large {
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+}
+
+.availability-dot-large.online { background: #2ecc71; }
+.availability-dot-large.busy { background: #f39c12; }
+.availability-dot-large.away { background: #e74c3c; }
+
+.member-basic-info h3 {
+  margin: 0 0 0.3rem 0;
+  color: white;
+  font-size: 1.3rem;
+}
+
+.member-basic-info p {
+  margin: 0 0 0.5rem 0;
+  color: #e0e0e0;
+}
+
+.specialization-badge {
+  background: rgba(78, 205, 196, 0.2);
+  color: #4ecdc4;
+  padding: 0.3rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.member-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.member-actions .icon-btn.danger:hover {
+  background: rgba(231, 76, 60, 0.4);
+  color: #e74c3c;
+}
+
+.team-member-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-label {
+  font-size: 0.8rem;
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+.performance-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.performance-bar {
+  width: 80px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.performance-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.performance-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4ecdc4;
+}
+
+.task-count-badge {
+  background: rgba(52, 152, 219, 0.2);
+  color: #3498db;
+  padding: 0.3rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.team-member-footer {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.btn-secondary.small {
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
 }

@@ -566,6 +566,131 @@ const Admin = ({ user }) => {
     </div>
   );
 
+// ======== INSERT THIS TEAM SECTION FUNCTION ========
+const renderTeamSection = () => (
+  <div className="team-section-enhanced">
+    {/* Header with Stats */}
+    <div className="incidents-header">
+      <div className="header-content">
+        <h1>Team Management</h1>
+        <p>Manage your field technicians and team members</p>
+      </div>
+      <div className="header-stats">
+        <div className="header-stat">
+          <span className="stat-number">{teamMembers.length}</span>
+          <span className="stat-label">Total Members</span>
+        </div>
+        <div className="header-stat">
+          <span className="stat-number">{teamMembers.filter(m => m.status === 'Available').length}</span>
+          <span className="stat-label">Available Now</span>
+        </div>
+        <div className="header-stat">
+          <span className="stat-number">{teamMembers.filter(m => m.tasks > 0).length}</span>
+          <span className="stat-label">Active Tasks</span>
+        </div>
+      </div>
+    </div>
+
+    {/* Action Bar */}
+    <div className="action-bar">
+      <div className="action-group">
+        <button className="btn-primary">
+          <span className="btn-icon">➕</span>
+          Add Team Member
+        </button>
+        <button className="btn-secondary">
+          <span className="btn-icon">📧</span>
+          Send Broadcast
+        </button>
+      </div>
+      <div className="filter-group">
+        <select className="filter-select">
+          <option>All Roles</option>
+          <option>Field Technician</option>
+          <option>Senior Technician</option>
+          <option>Maintenance Engineer</option>
+          <option>Emergency Response</option>
+        </select>
+        <select className="filter-select">
+          <option>All Status</option>
+          <option>Available</option>
+          <option>On Site</option>
+          <option>On Break</option>
+        </select>
+        <div className="search-box">
+          <span className="search-icon">🔍</span>
+          <input type="text" placeholder="Search team members..." className="search-input" />
+        </div>
+      </div>
+    </div>
+
+    {/* Team Grid */}
+    <div className="team-grid-enhanced">
+      {teamMembers.map(member => (
+        <div key={member.id} className="team-member-card">
+          <div className="team-member-header">
+            <div className="member-identity">
+              <div className="member-avatar-large">
+                {member.avatar}
+                <div className={`availability-dot-large ${member.status === 'Available' ? 'online' : member.status === 'On Site' ? 'busy' : 'away'}`}></div>
+              </div>
+              <div className="member-basic-info">
+                <h3>{member.name}</h3>
+                <p>{member.role}</p>
+                <span className="specialization-badge">Field Operations</span>
+              </div>
+            </div>
+            <div className="member-actions">
+              <button className="icon-btn" title="Edit">✏️</button>
+              <button className="icon-btn" title="Message">💬</button>
+              <button className="icon-btn danger" title="Remove">🗑️</button>
+            </div>
+          </div>
+
+          <div className="team-member-details">
+            <div className="detail-row">
+              <span className="detail-label">Status</span>
+              <span className={`status-tag status-${member.status.toLowerCase().replace(' ', '-')}`}>
+                {member.status}
+              </span>
+            </div>
+            
+            <div className="detail-row">
+              <span className="detail-label">Current Tasks</span>
+              <span className="task-count-badge">{member.tasks} active tasks</span>
+            </div>
+            
+            <div className="detail-row">
+              <span className="detail-label">Performance</span>
+              <div className="performance-indicator">
+                <div className="performance-bar">
+                  <div 
+                    className="performance-fill" 
+                    style={{ width: `${member.tasks > 0 ? '85%' : '95%'}` }}
+                  ></div>
+                </div>
+                <span className="performance-text">{member.tasks > 0 ? '85%' : '95%'}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="team-member-footer">
+            <button className="btn-secondary small">
+              View Schedule
+            </button>
+            <button className="btn-secondary small">
+              Task History
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+// ======== END OF TEAM SECTION FUNCTION ========
+
+
+
   const renderSection = () => {
     switch(activeSection) {
       case "dashboard":
@@ -573,7 +698,7 @@ const Admin = ({ user }) => {
       case "incidents":
         return renderIncidentsSection();
       case "users":
-        return <div className="section-placeholder"><h2>User Management</h2><p>User administration panel</p></div>;
+        return renderTeamSection();
       case "reports":
         return <div className="section-placeholder"><h2>Report Management</h2><p>Report generation and analytics</p></div>;
       case "settings":
